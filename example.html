@@ -103,18 +103,22 @@
         addonOptions = options;
         $('button').removeAttr('disabled');
         showAddonData(addonOptions.data, true);
+        loadPaperGrowthDashboard();
       }).on('update', function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
         showAddonData(addonOptions.data);
       });
 
-      var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
-      var getInstitutions = addon.api.getPositions(getQueryFromOptions(addonOptions));
+      function loadPaperGrowthDashboard() {
+        var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
+        var getInstitutions = addon.api.getPositions(getQueryFromOptions(addonOptions));
 
-      Promise.all([getPositions, getInstitutions]).then(function (values) {
-        console.log(values);
-      });
+        Promise.all([getPositions, getInstitutions]).then(function (values) {
+          console.log(values);
+        });
+      }
+
 
 
       $('#addTransaction').on('click', function () {

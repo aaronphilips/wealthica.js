@@ -135,13 +135,12 @@
             return acc
           }, 0);
 
-          var categories = positions.reduce(function (acc, x) {
+          var categoryRatios = positions.reduce(function (acc, x) {
             acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
             return acc
           }, {});
           
-          var actualCategoryRatios = Object.entries(categories).map(x => ({ "name": x[0], "y": x[1] }));
-          buildPortfolioPieChart(actualCategoryRatios);
+          buildPortfolioPieChart(categoryRatios);
         });
       }
 
@@ -234,6 +233,7 @@
       }
 
       function buildPortfolioPieChart(data) {
+        var actualSeriesData = Object.entries(data).map(x => ({ "name": x[0], "y": x[1] }));
         Highcharts.chart('container', {
           chart: {
             plotBackgroundColor: null,
@@ -250,17 +250,15 @@
             pie: {
               showInLegend: true,
               colors: [
-                shadeColor("#2C7BE5", 0),
-                shadeColor("#2C7BE5", 0.2),
-                shadeColor("#2C7BE5", 0.4),
-                shadeColor("#2C7BE5", 0.6),
-                shadeColor("#2C7BE5", 0.8)
+                shadeColor("#7f3eab", 0),
+                shadeColor("#7f3eab", 0.2),
+                shadeColor("#7f3eab", 0.4),
+                shadeColor("#7f3eab", 0.6),
+                shadeColor("#7f3eab", 0.8)
               ],
               dataLabels: {
                 enabled: false,
               },
-              startAngle: 0,
-              endAngle: 360
             }
           },
           series: [{

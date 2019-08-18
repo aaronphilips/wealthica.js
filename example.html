@@ -1,17 +1,80 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>Wealthica Example Add-on</title>
   <style>
-    body { margin: 0; padding: 0; }
+    body {
+      margin: 0;
+      padding: 0;
+    }
   </style>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
   <script type="text/javascript" src="https://wealthica.github.io/wealthica.js/dist/addon.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+
 </head>
+
 <body>
+
+  <div class="container">
+    <div class="header mt-md-5">
+      <div class="header-body">
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="header-pretitle">
+              PaperGrowth
+            </h6>
+            <h1 class="header-title">
+              Dashboard
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <div class="row">
+        <div class="col-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-header-title">
+                Allocations
+              </h4>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="ordersChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-6">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-header-title">
+                Portfolio Comparison
+              </h4>
+            </div>
+            <div class="card-body">
+              <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <h3>This is the Wealthica Example Add-on.</h3>
   <p>Try some of the actions below:</p>
   <p>
@@ -19,14 +82,82 @@
     <button type="button" disabled="disabled" id="getPositions">List Positions</button>
     <button type="button" disabled="disabled" id="addTransaction">Add Transaction</button>
     <button type="button" disabled="disabled" id="saveData">Save Data</button>
+    <button type="button" disabled="disabled" id="getInstitutions">List Positions</button>
+    
   </p>
   <textarea id="data" rows="8" cols="100"></textarea>
   <div id="result"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
   <script type="text/javascript">
     var addon, addonOptions;
 
+    var testData = [];
+    var totalMarketValue = testData.reduce(function (acc, x) {
+      acc = acc + x.market_value;
+      return acc
+    }, 0);
+    var actualCategoryRatios = [{ "name": "", "y": 0, "showInLegend": false }].concat(Object.entries(testData.reduce(function (acc, x) {
+      acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
+      return acc
+    }, {})).map(x => ({ "name": x[0], "y": x[1] })));
+
     $(function () {
+      $(function () {
+        Highcharts.chart('container', {
+          chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false,
+          },
+          title: {
+            text: ''
+          },
+          tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+            pie: {
+              showInLegend: true,
+              colors: [
+                "#969696",
+                shadeColor("#2C7BE5", 0),
+                shadeColor("#2C7BE5", 0.2),
+                shadeColor("#2C7BE5", 0.4),
+                shadeColor("#2C7BE5", 0.6),
+                shadeColor("#2C7BE5", 0.8)
+              ],
+              dataLabels: {
+                enabled: false,
+              },
+              startAngle: 0,
+              endAngle: 360
+            }
+          },
+          series: [{
+            type: 'pie',
+            name: 'Actual',
+            size: '70%',
+            data: actualCategoryRatios
+          }, {
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: false,
+            type: 'pie',
+            name: 'Target',
+            innerSize: '80%',
+            data: [{ name: "Unallocated", y: 1 }
+            ]
+          }]
+        });
+      });
+
       addon = new Addon();
 
       addon.on('init', function (options) {
@@ -98,6 +229,18 @@
         });
       });
 
+      $('#getInstitutions').on('click', function () {
+        $(this).attr('disabled', 'disabled');
+
+        addon.api.getInstitutions(getQueryFromOptions(addonOptions)).then(function (response) {
+          $('#result').html('List Positions Result:<br><code>' + JSON.stringify(response) + '</code>');
+        }).catch(function (err) {
+          $('#result').html('Error:<br><code>' + err + '</code>');
+        }).finally(function () {
+          $('#getPositions').removeAttr('disabled');
+        });
+      });
+
       // Show addon data in result box and optionally update the text input.
       function showAddonData(data, updateInput) {
         $('#result').html('Addon data:<br><code>' + JSON.stringify(data) + '</code>');
@@ -107,17 +250,32 @@
       }
 
       // Compose a query object from the addon options to pass to the API calls.
-      function getQueryFromOptions (options) {
+      function getQueryFromOptions(options) {
         return {
           from: options.dateRangeFilter && options.dateRangeFilter[0],
           to: options.dateRangeFilter && options.dateRangeFilter[1],
           groups: options.groupsFilter,
           institutions: options.institutionsFilter,
-          investments: options.investmentsFilter === 'all' ? null: options.investmentsFilter,
+          investments: options.investmentsFilter === 'all' ? null : options.investmentsFilter,
         }
+      }
+
+      function shadeColor(color, percent) {
+        var f = parseInt(color.slice(1), 16),
+          t = percent < 0 ? 0 : 255,
+          p = percent < 0 ? percent * -1 : percent,
+          R = f >> 16,
+          G = f >> 8 & 0x00FF,
+          B = f & 0x0000FF;
+        return "#" +
+          (0x1000000 +
+            (Math.round((t - R) * p) + R) * 0x10000 +
+            (Math.round((t - G) * p) + G) * 0x100 +
+            (Math.round((t - B) * p) + B)).toString(16).slice(1);
       }
     });
   </script>
 
 </body>
+
 </html>

@@ -20,13 +20,9 @@
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-
-
-
 </head>
 
 <body>
-
   <div class="container">
     <div class="header mt-md-5">
       <div class="header-body">
@@ -83,7 +79,7 @@
     <button type="button" disabled="disabled" id="addTransaction">Add Transaction</button>
     <button type="button" disabled="disabled" id="saveData">Save Data</button>
     <button type="button" disabled="disabled" id="getInstitutions">List Positions</button>
-    
+
   </p>
   <textarea id="data" rows="8" cols="100"></textarea>
   <div id="result"></div>
@@ -97,66 +93,7 @@
   <script type="text/javascript">
     var addon, addonOptions;
 
-    var testData = [];
-    var totalMarketValue = testData.reduce(function (acc, x) {
-      acc = acc + x.market_value;
-      return acc
-    }, 0);
-    var actualCategoryRatios = [{ "name": "", "y": 0, "showInLegend": false }].concat(Object.entries(testData.reduce(function (acc, x) {
-      acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
-      return acc
-    }, {})).map(x => ({ "name": x[0], "y": x[1] })));
-
     $(function () {
-      $(function () {
-        Highcharts.chart('container', {
-          chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: 0,
-            plotShadow: false,
-          },
-          title: {
-            text: ''
-          },
-          tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-          },
-          plotOptions: {
-            pie: {
-              showInLegend: true,
-              colors: [
-                "#969696",
-                shadeColor("#2C7BE5", 0),
-                shadeColor("#2C7BE5", 0.2),
-                shadeColor("#2C7BE5", 0.4),
-                shadeColor("#2C7BE5", 0.6),
-                shadeColor("#2C7BE5", 0.8)
-              ],
-              dataLabels: {
-                enabled: false,
-              },
-              startAngle: 0,
-              endAngle: 360
-            }
-          },
-          series: [{
-            type: 'pie',
-            name: 'Actual',
-            size: '70%',
-            data: actualCategoryRatios
-          }, {
-            dataLabels: {
-              enabled: false
-            },
-            showInLegend: false,
-            type: 'pie',
-            name: 'Target',
-            innerSize: '80%',
-            data: [{ name: "Unallocated", y: 1 }
-            ]
-          }]
-        });
-      });
 
       addon = new Addon();
 
@@ -171,6 +108,14 @@
         addonOptions = _.extend(addonOptions, options);
         showAddonData(addonOptions.data);
       });
+
+      var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
+      var getInstitutions = addon.api.getPositions(getQueryFromOptions(addonOptions));
+
+      Promise.all([getPositions, getInstitutions]).then(function (values) {
+        console.log(values);
+      });
+
 
       $('#addTransaction').on('click', function () {
         $(this).attr('disabled', 'disabled');
@@ -259,6 +204,58 @@
           investments: options.investmentsFilter === 'all' ? null : options.investmentsFilter,
         }
       }
+
+      function buildPortfolioPieChart(data) {
+        Highcharts.chart('container', {
+          chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false,
+          },
+          title: {
+            text: ''
+          },
+          tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+            pie: {
+              showInLegend: true,
+              colors: [
+                shadeColor("#2C7BE5", 0),
+                shadeColor("#2C7BE5", 0.2),
+                shadeColor("#2C7BE5", 0.4),
+                shadeColor("#2C7BE5", 0.6),
+                shadeColor("#2C7BE5", 0.8)
+              ],
+              dataLabels: {
+                enabled: false,
+              },
+              startAngle: 0,
+              endAngle: 360
+            }
+          },
+          series: [{
+            type: 'pie',
+            name: 'Actual',
+            size: '70%',
+            data: actualCategoryRatios
+          }, {
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: false,
+            type: 'pie',
+            name: 'Target',
+            innerSize: '80%',
+            data: [
+              { name: "Unallocated", y: 1, color: "#969696" },
+              { name: "Unallocated2", y: 1, }
+            ]
+          }]
+        });
+      }
+
 
       function shadeColor(color, percent) {
         var f = parseInt(color.slice(1), 16),

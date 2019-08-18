@@ -112,10 +112,18 @@
 
       function loadPaperGrowthDashboard() {
         var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
-        var getInstitutions = addon.api.getPositions(getQueryFromOptions(addonOptions));
-
-        Promise.all([getPositions, getInstitutions]).then(function (values) {
-          console.log(values);
+        var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
+        Promise.all([getPositions, getInstitutions]).then(function (data) {
+          var positions = data[0];
+          var totalMarketValue = positions.reduce(function (acc, x) {
+            acc = acc + x.market_value;
+            return acc
+          }, 0);
+          var actualCategoryRatios = Object.entries(positions.reduce(function (acc, x) {
+            acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
+            return acc
+          }, {})).map(x => ({ "name": x[0], "y": x[1] }));
+          buildPortfolioPieChart(actualCategoryRatios);
         });
       }
 
@@ -243,7 +251,7 @@
             type: 'pie',
             name: 'Actual',
             size: '70%',
-            data: actualCategoryRatios
+            data: data
           }, {
             dataLabels: {
               enabled: false
@@ -259,7 +267,6 @@
           }]
         });
       }
-
 
       function shadeColor(color, percent) {
         var f = parseInt(color.slice(1), 16),

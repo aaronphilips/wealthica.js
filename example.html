@@ -303,6 +303,7 @@
 
       function buildPortfolioPieChart(data) {
         var actualSeriesData = Object.entries(data).map(x => ({ "name": x[0], "y": x[1] }));
+        var targetSeriesData = Object.entries(addonOptions.data).map(x => ({ "name": x[0], "y": x[1] }));
         Highcharts.chart("container", {
           chart: {
             plotBackgroundColor: null,
@@ -343,10 +344,7 @@
             type: "pie",
             name: "Target",
             innerSize: "80%",
-            data: [
-              { name: "Unallocated", y: 1, color: "#969696" },
-              { name: "Unallocated2", y: 1, }
-            ]
+            data: targetSeriesData
           }]
         });
       }

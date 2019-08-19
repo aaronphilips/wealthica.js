@@ -90,7 +90,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body text-center">
           <input type="hidden" id="selectedCategory" name="newTarget" value="">
           <input type="number" id="newTarget" name="quantity" min="0" max="100">
         </div>
@@ -200,7 +200,7 @@
           });
           button.html("<i class=\"fas fa-pencil-alt\"></i>");
           $("#category-table").on("click", "#category" + index, function () {
-            $("#editTargetModalLabel").html("Edit Target for " + category);
+            $("#editTargetModalLabel").html("Edit Target Percentage for " + category);
             $("#selectedCategory").val(category);
             $("#newTarget").val((target * 100).toFixed(1))
             $("#editTargetModal").modal("show");

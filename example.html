@@ -96,18 +96,19 @@
   </p>
   <textarea id="data" rows="8" cols="100"></textarea>
   <div id="result"></div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal fade" id="editTargetModal" tabindex="-1" role="dialog" aria-labelledby="editTargetModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="editTargetModalLabel">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <input type="hidden" id="custId" name="custId" value="3487">
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -130,14 +131,14 @@
 
       addon = new Addon();
 
-      addon.on('init', function (options) {
+      addon.on("init", function (options) {
         // Dashboard is ready and is signaling to the add-on that it should
         // render using the passed in options (filters, language, etc.)
         addonOptions = options;
-        $('button').removeAttr('disabled');
+        $("button").removeAttr("disabled");
         showAddonData(addonOptions.data, true);
         loadPaperGrowthDashboard();
-      }).on('update', function (options) {
+      }).on("update", function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
         showAddonData(addonOptions.data);
@@ -171,80 +172,80 @@
         });
       }
 
-      $('#addTransaction').on('click', function () {
-        $(this).attr('disabled', 'disabled');
+      $("#addTransaction").on("click", function () {
+        $(this).attr("disabled", "disabled");
 
         addon.addTransaction({
           description: "New transaction from Example Add-on"
         }).then(function (transaction) {
-          $('#result').html('New transaction:<br><code>' + JSON.stringify(transaction) + '</code>');
+          $("#result").html("New transaction:<br><code>" + JSON.stringify(transaction) + "</code>");
         }).catch(function (err) {
-          $('#result').html('Error:<br><code>' + err + '</code>');
+          $("#result").html("Error:<br><code>" + err + "</code>");
         }).finally(function () {
-          $('#addTransaction').removeAttr('disabled');
+          $("#addTransaction").removeAttr("disabled");
         });
       });
 
-      $('#getTransactions').on('click', function () {
-        $(this).attr('disabled', 'disabled');
+      $("#getTransactions").on("click", function () {
+        $(this).attr("disabled", "disabled");
 
         addon.api.getTransactions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $('#result').html('List Transactions Result:<br><code>' + JSON.stringify(response) + '</code>');
+          $("#result").html("List Transactions Result:<br><code>" + JSON.stringify(response) + "</code>");
         }).catch(function (err) {
-          $('#result').html('Error:<br><code>' + err + '</code>');
+          $("#result").html("Error:<br><code>" + err + "</code>");
         }).finally(function () {
-          $('#getTransactions').removeAttr('disabled');
+          $("#getTransactions").removeAttr("disabled");
         });
       });
 
-      $('#getPositions').on('click', function () {
-        $(this).attr('disabled', 'disabled');
+      $("#getPositions").on("click", function () {
+        $(this).attr("disabled", "disabled");
 
         addon.api.getPositions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $('#result').html('List Positions Result:<br><code>' + JSON.stringify(response) + '</code>');
+          $("#result").html("List Positions Result:<br><code>" + JSON.stringify(response) + "</code>");
         }).catch(function (err) {
-          $('#result').html('Error:<br><code>' + err + '</code>');
+          $("#result").html("Error:<br><code>" + err + "</code>");
         }).finally(function () {
-          $('#getPositions').removeAttr('disabled');
+          $("#getPositions").removeAttr("disabled");
         });
       });
 
-      $('#saveData').on('click', function () {
-        $(this).attr('disabled', 'disabled');
-        var newData = $('#data').val();
+      $("#saveData").on("click", function () {
+        $(this).attr("disabled", "disabled");
+        var newData = $("#data").val();
 
         // Try parsing textarea value to a JSON object before passing to addon.saveData(data)
         try { newData = JSON.parse(newData) }
         catch (e) {
-          $('#result').html('Error:<br><code>Data must be JSON</code>');
-          $('#saveData').removeAttr('disabled');
+          $("#result").html("Error:<br><code>Data must be JSON</code>");
+          $("#saveData").removeAttr("disabled");
           return;
         }
 
         addon.saveData(newData).catch(function (err) {
-          $('#result').html('Error:<br><code>' + err + '</code>');
+          $("#result").html("Error:<br><code>" + err + "</code>");
         }).finally(function () {
-          $('#saveData').removeAttr('disabled');
+          $("#saveData").removeAttr("disabled");
         });
       });
 
-      $('#getInstitutions').on('click', function () {
-        $(this).attr('disabled', 'disabled');
+      $("#getInstitutions").on("click", function () {
+        $(this).attr("disabled", "disabled");
 
         addon.api.getInstitutions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $('#result').html('List Positions Result:<br><code>' + JSON.stringify(response) + '</code>');
+          $("#result").html("List Positions Result:<br><code>" + JSON.stringify(response) + "</code>");
         }).catch(function (err) {
-          $('#result').html('Error:<br><code>' + err + '</code>');
+          $("#result").html("Error:<br><code>" + err + "</code>");
         }).finally(function () {
-          $('#getPositions').removeAttr('disabled');
+          $("#getPositions").removeAttr("disabled");
         });
       });
 
       // Show addon data in result box and optionally update the text input.
       function showAddonData(data, updateInput) {
-        $('#result').html('Addon data:<br><code>' + JSON.stringify(data) + '</code>');
+        $("#result").html("Addon data:<br><code>" + JSON.stringify(data) + "</code>");
         if (updateInput && data) {
-          $('#data').val(JSON.stringify(data));
+          $("#data").val(JSON.stringify(data));
         }
       }
 
@@ -255,7 +256,7 @@
           to: options.dateRangeFilter && options.dateRangeFilter[1],
           groups: options.groupsFilter,
           institutions: options.institutionsFilter,
-          investments: options.investmentsFilter === 'all' ? null : options.investmentsFilter,
+          investments: options.investmentsFilter === "all" ? null : options.investmentsFilter,
         }
       }
 
@@ -273,7 +274,9 @@
           button.html("<i class=\"fas fa-pencil-alt\"></i>");
           $("#category-table").on("click", "#category" + index, function () {
             console.log(category);
-            $('#exampleModal').modal('show');
+
+            $("#editTargetModalLabel").html(category);
+            $("#editTargetModal").modal("show");
           })
           var td = $("<td>");
           td.addClass("text-right");
@@ -281,26 +284,26 @@
 
           tr.append("<td class=\"align-middle\">" + category + "</td>");
           tr.append("<td class=\"text-center align-middle\">" + target + "</td>");
-          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual.toFixed(1) + "%" + "</td>");
+          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + (actual * 100).toFixed(1) + "%" + "</td>");
           tr.append(td);
 
-          $('#category-table').append(tr);
+          $("#category-table").append(tr);
         });
       }
 
       function buildPortfolioPieChart(data) {
         var actualSeriesData = Object.entries(data).map(x => ({ "name": x[0], "y": x[1] }));
-        Highcharts.chart('container', {
+        Highcharts.chart("container", {
           chart: {
             plotBackgroundColor: null,
             plotBorderWidth: 0,
             plotShadow: false,
           },
           title: {
-            text: ''
+            text: ""
           },
           tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
           },
           plotOptions: {
             pie: {
@@ -318,18 +321,18 @@
             }
           },
           series: [{
-            type: 'pie',
-            name: 'Actual',
-            size: '70%',
+            type: "pie",
+            name: "Actual",
+            size: "70%",
             data: actualSeriesData
           }, {
             dataLabels: {
               enabled: false
             },
             showInLegend: false,
-            type: 'pie',
-            name: 'Target',
-            innerSize: '80%',
+            type: "pie",
+            name: "Target",
+            innerSize: "80%",
             data: [
               { name: "Unallocated", y: 1, color: "#969696" },
               { name: "Unallocated2", y: 1, }

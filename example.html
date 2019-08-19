@@ -146,7 +146,7 @@
           Object.entries(categoryRatios).forEach(element => {
             addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
           });
-          buildPortfolioTargetTable()
+          buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
         });
       }
@@ -241,8 +241,15 @@
 
       function buildPortfolioTargetTable() {
         Object.entries(addonOptions.data).forEach(element => {
+          var category = element[0];
+          var target = element[1];
+          var actual = addonOptions.data[element[0]];
           var tr = $("<tr>");
-          tr.append("<td class=\"align-middle\">" + element[0] + "</td>")
+          tr.append("<td class=\"align-middle\">" + category + "</td>")
+          tr.append("<td class=\"text-center align-middle\">" + target + "</td>")
+          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual + "</td>")
+          tr.append("<td class=\"text-right\">&#9998;</td>")
+
           $('#category-table').append(tr);
         });
       }
@@ -310,6 +317,12 @@
             (Math.round((t - G) * p) + G) * 0x100 +
             (Math.round((t - B) * p) + B)).toString(16).slice(1);
       }
+
+      function getTextColor(actual, target) {
+        var difference = Math.Abs((actual - target) / target);
+        return difference > 0.1 ? "text-danger" : difference < 0.01m ? "text-success" : "text-warning";
+      }
+
     });
   </script>
 

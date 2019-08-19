@@ -59,11 +59,9 @@
                     </tr>
                   </thead>
                   <tbody id="category-table">
-
                   </tbody>
                 </table>
               </div>
-
             </div>
           </div>
         </div>
@@ -107,12 +105,12 @@
           </button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="custId" name="custId" value="3487">
-
+          <input type="hidden" id="selectedCategory" name="newTarget" value="">
+          <input type="number" id="newTarget" name="quantity" min="0" max="100">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button id="saveTarget" type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -241,6 +239,11 @@
         });
       });
 
+      $("#saveTarget").on("click", function () {
+        addonOptions.data[$("#selectedTarget")]=$("#newTarget").val();
+        addon.saveData(addonOptions.data);
+      });
+
       // Show addon data in result box and optionally update the text input.
       function showAddonData(data, updateInput) {
         $("#result").html("Addon data:<br><code>" + JSON.stringify(data) + "</code>");
@@ -274,8 +277,8 @@
           button.html("<i class=\"fas fa-pencil-alt\"></i>");
           $("#category-table").on("click", "#category" + index, function () {
             console.log(category);
-
-            $("#editTargetModalLabel").html(category);
+            $("#editTargetModalLabel").html("Edit Target for " + category);
+            $("#selectedCategory").val(category);
             $("#editTargetModal").modal("show");
           })
           var td = $("<td>");

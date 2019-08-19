@@ -91,8 +91,8 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <input type="hidden" id="selectedCategory" name="newTarget" value="">
-          <input type="number" id="newTarget" name="quantity" min="0" max="100">
+          <input type="hidden" id="selectedCategory" value="">
+          <input type="number" id="newTarget" class="form-control min="0" max="100">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -202,7 +202,8 @@
           $("#category-table").on("click", "#category" + index, function () {
             $("#editTargetModalLabel").html("Edit Target Percentage for " + category);
             $("#selectedCategory").val(category);
-            $("#newTarget").val((target * 100).toFixed(1))
+            $("#newTarget").attr("placeholder",(target * 100).toFixed(1))
+            $("#newTarget").val("")
             $("#editTargetModal").modal("show");
           })
           var td = $("<td>");

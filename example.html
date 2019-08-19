@@ -165,6 +165,8 @@
             addonOptions.data[element[0]] = saved[element[0]] || 0;
           });
 
+          addon.saveData(addonOptions.data);
+
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
         });
@@ -242,6 +244,7 @@
       $("#saveTarget").on("click", function () {
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
         addon.saveData(addonOptions.data);
+
         $("#category-table").empty();
         $("#container").empty();
 

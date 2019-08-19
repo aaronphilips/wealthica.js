@@ -245,7 +245,11 @@
           var target = element[1];
           var actual = addonOptions.data[element[0]];
           var tr = $("<tr>");
-          var button = $("<button>", { "id": "category" + index });
+          var button = $("<button>", { 
+            "id": "category" + index,
+            "type":"button",
+            "class":"btn btn-light"
+             });
           button.html("<i class=\"fas fa-pencil-alt\"></i>");
           $("#category-table").on("click", "#category" + index, function () {
             console.log(category);

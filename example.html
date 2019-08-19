@@ -250,10 +250,14 @@
           $("#category-table").on("click", button, function(){
             console.log(category);
           } )
-          tr.append("<td class=\"align-middle\">" + category + "</td>")
-          tr.append("<td class=\"text-center align-middle\">" + target + "</td>")
-          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual + "</td>")
-          tr.append("<td class=\"text-right\"></td>")
+          var td= $("<td>");
+          td.addClass("text-right");
+          td.html(button);
+
+          tr.append("<td class=\"align-middle\">" + category + "</td>");
+          tr.append("<td class=\"text-center align-middle\">" + target + "</td>");
+          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual + "</td>");
+          tr.append(td);
 
           $('#category-table').append(tr);
         });

@@ -92,7 +92,7 @@
         </div>
         <div class="modal-body text-center">
           <input type="hidden" id="selectedCategory" value="">
-          <input type="number" id="newTarget" class="form-control min="0" max="100">
+          <input type="number" id="newTarget" class="form-control min=" 0" max="100">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -133,6 +133,7 @@
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
         Promise.all([getPositions, getInstitutions]).then(function (data) {
           var positions = data[0];
+          var institutions = data[1];
           var saved = addonOptions.data;
 
           addonOptions.data = {}
@@ -155,6 +156,7 @@
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
+          buildPurchaseTable(categoryRatios, positions, institutions);
         });
       }
 
@@ -202,7 +204,7 @@
           $("#category-table").on("click", "#category" + index, function () {
             $("#editTargetModalLabel").html("Edit Target Percentage for " + category);
             $("#selectedCategory").val(category);
-            $("#newTarget").attr("placeholder",(target * 100).toFixed(1))
+            $("#newTarget").attr("placeholder", (target * 100).toFixed(1))
             $("#newTarget").val("")
             $("#editTargetModal").modal("show");
           })
@@ -265,6 +267,10 @@
             data: targetSeriesData
           }]
         });
+      }
+
+      function buildPurchaseTable(categoryRatios, positions, institutions){
+
       }
 
       function shadeColor(color, percent) {

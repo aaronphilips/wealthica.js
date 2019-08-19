@@ -147,10 +147,9 @@
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
         Promise.all([getPositions, getInstitutions]).then(function (data) {
           var positions = data[0];
+          var saved = addonOptions.data;
 
-          if (addonOptions.data == null) {
-            addonOptions.data = {}
-          }
+          addonOptions.data = {}
 
           var totalMarketValue = positions.reduce(function (acc, x) {
             acc = acc + x.market_value;
@@ -163,8 +162,9 @@
           }, {});
 
           Object.entries(categoryRatios).forEach(element => {
-            addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
+            addonOptions.data[element[0]] = saved[element[0]] || 0;
           });
+
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
         });
@@ -244,8 +244,8 @@
         addon.saveData(addonOptions.data);
         $("#category-table").empty();
         $("#container").empty();
-        
-        loadPaperGrowthDashboard();        
+
+        loadPaperGrowthDashboard();
       });
 
       // Show addon data in result box and optionally update the text input.

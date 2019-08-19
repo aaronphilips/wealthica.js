@@ -128,7 +128,7 @@
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
         Promise.all([getPositions, getInstitutions]).then(function (data) {
           var positions = data[0];
-         
+
           if (addonOptions.data == null) {
             addonOptions.data = {}
           }
@@ -144,7 +144,7 @@
           }, {});
 
           Object.entries(categoryRatios).forEach(element => {
-            addonOptions.data[element[0]]=addonOptions.data[element[0]]||0;
+            addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
           });
           buildPortfolioTargetTable()
           buildPortfolioPieChart(categoryRatios);
@@ -239,8 +239,12 @@
         }
       }
 
-      function buildPortfolioTargetTable(){
-        
+      function buildPortfolioTargetTable() {
+        Object.entries(addonOptions.data).forEach(element => {
+          var tr = $("<tr>");
+          tr.append("<td class=\"align-middle\">" + element[0] + "</td>")
+          $('#category-table').append(tr);
+        });
       }
 
       function buildPortfolioPieChart(data) {

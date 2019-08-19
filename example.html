@@ -110,7 +110,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button id="saveTarget" type="button" class="btn btn-primary">Save changes</button>
+          <button id="saveTarget" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
         </div>
       </div>
     </div>
@@ -290,8 +290,8 @@
           td.html(button);
 
           tr.append("<td class=\"align-middle\">" + category + "</td>");
-          tr.append("<td class=\"text-center align-middle\">" + (target * 100).toFixed(1) + "</td>");
-          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + (actual * 100).toFixed(1) + "%" + "</td>");
+          tr.append("<td class=\"text-center align-middle\">" + (target * 100).toFixed(1) + "%</td>");
+          tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + (actual * 100).toFixed(1) + "%</td>");
           tr.append(td);
 
           $("#category-table").append(tr);

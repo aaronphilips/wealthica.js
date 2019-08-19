@@ -128,7 +128,10 @@
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
         Promise.all([getPositions, getInstitutions]).then(function (data) {
           var positions = data[0];
-          var saved = addonOptions.data;
+         
+          if (addonOptions.data == null) {
+            addonOptions.data = {}
+          }
 
           var totalMarketValue = positions.reduce(function (acc, x) {
             acc = acc + x.market_value;
@@ -139,7 +142,11 @@
             acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
             return acc
           }, {});
-          
+
+          Object.entries(categoryRatios).forEach(element => {
+            addonOptions.data[element[0]]=addonOptions.data[element[0]]||0;
+          });
+          buildPortfolioTargetTable()
           buildPortfolioPieChart(categoryRatios);
         });
       }
@@ -230,6 +237,10 @@
           institutions: options.institutionsFilter,
           investments: options.investmentsFilter === 'all' ? null : options.investmentsFilter,
         }
+      }
+
+      function buildPortfolioTargetTable(){
+        
       }
 
       function buildPortfolioPieChart(data) {

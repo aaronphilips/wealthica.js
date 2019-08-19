@@ -240,17 +240,17 @@
       }
 
       function buildPortfolioTargetTable() {
-        Object.entries(addonOptions.data).forEach((element) => {
+        Object.entries(addonOptions.data).forEach((element, index) => {
           var category = element[0];
           var target = element[1];
           var actual = addonOptions.data[element[0]];
           var tr = $("<tr>");
-          var button = $("<button>");
+          var button = $("<button>", { "id": "category" + index });
           button.html("<i class=\"fas fa-pencil-alt\"></i>");
-          $("#category-table").on("click", button, function(){
+          $("#category-table").on("click", "#category" + index, function () {
             console.log(category);
-          } )
-          var td= $("<td>");
+          })
+          var td = $("<td>");
           td.addClass("text-right");
           td.html(button);
 

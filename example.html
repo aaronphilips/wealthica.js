@@ -240,7 +240,7 @@
       });
 
       $("#saveTarget").on("click", function () {
-        addonOptions.data[$("#selectedCategory").val()]=$("#newTarget").val();
+        addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
         addon.saveData(addonOptions.data);
       });
 
@@ -286,7 +286,7 @@
           td.html(button);
 
           tr.append("<td class=\"align-middle\">" + category + "</td>");
-          tr.append("<td class=\"text-center align-middle\">" + target + "</td>");
+          tr.append("<td class=\"text-center align-middle\">" + (target * 100).toFixed + "</td>");
           tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + (actual * 100).toFixed(1) + "%" + "</td>");
           tr.append(td);
 

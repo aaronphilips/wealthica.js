@@ -11,7 +11,6 @@
       padding: 0;
     }
   </style>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -20,6 +19,7 @@
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://kit.fontawesome.com/a2ea88a0c5.js"></script>
 </head>
 
 <body>
@@ -248,7 +248,7 @@
           tr.append("<td class=\"align-middle\">" + category + "</td>")
           tr.append("<td class=\"text-center align-middle\">" + target + "</td>")
           tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual + "</td>")
-          tr.append("<td class=\"text-right\">&#9998;</td>")
+          tr.append("<td class=\"text-right\"><i class=\"fas fa-pencil-alt\"></i></td>")
 
           $('#category-table').append(tr);
         });

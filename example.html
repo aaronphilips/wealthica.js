@@ -240,15 +240,20 @@
       }
 
       function buildPortfolioTargetTable() {
-        Object.entries(addonOptions.data).forEach(element => {
+        Object.entries(addonOptions.data).forEach((element) => {
           var category = element[0];
           var target = element[1];
           var actual = addonOptions.data[element[0]];
           var tr = $("<tr>");
+          var button = $("<button>");
+          button.html("<i class=\"fas fa-pencil-alt\"></i>");
+          $("#category-table").on("click", button, function(){
+            alert(category);
+          } )
           tr.append("<td class=\"align-middle\">" + category + "</td>")
           tr.append("<td class=\"text-center align-middle\">" + target + "</td>")
           tr.append("<td class=\"text-center align-middle " + getTextColor(actual, target) + "\">" + actual + "</td>")
-          tr.append("<td class=\"text-right\"><i class=\"fas fa-pencil-alt\"></i></td>")
+          tr.append("<td class=\"text-right\"></td>")
 
           $('#category-table').append(tr);
         });

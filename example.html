@@ -240,7 +240,7 @@
       });
 
       $("#saveTarget").on("click", function () {
-        addonOptions.data[$("#selectedTarget")]=$("#newTarget").val();
+        addonOptions.data[$("#selectedTarget").val()]=$("#newTarget").val();
         addon.saveData(addonOptions.data);
       });
 

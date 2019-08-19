@@ -239,11 +239,11 @@
         }
       }
 
-      function buildPortfolioTargetTable() {
+      function buildPortfolioTargetTable(data) {
         Object.entries(addonOptions.data).forEach((element, index) => {
           var category = element[0];
           var target = element[1];
-          var actual = addonOptions.data[element[0]];
+          var actual = data[element[0]];
           var tr = $("<tr>");
           var button = $("<button>", { 
             "id": "category" + index,

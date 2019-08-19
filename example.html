@@ -81,41 +81,6 @@
     </div>
   </div>
 
-
-  <h3>This is the Wealthica Example Add-on.</h3>
-  <p>Try some of the actions below:</p>
-  <p>
-    <button type="button" disabled="disabled" id="getTransactions">List Transactions</button>
-    <button type="button" disabled="disabled" id="getPositions">List Positions</button>
-    <button type="button" disabled="disabled" id="addTransaction">Add Transaction</button>
-    <button type="button" disabled="disabled" id="saveData">Save Data</button>
-    <button type="button" disabled="disabled" id="getInstitutions">List Positions</button>
-
-  </p>
-  <textarea id="data" rows="8" cols="100"></textarea>
-  <div id="result"></div>
-  <div class="modal fade" id="editTargetModal" tabindex="-1" role="dialog" aria-labelledby="editTargetModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editTargetModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="selectedCategory" name="newTarget" value="">
-          <input type="number" id="newTarget" name="quantity" min="0" max="100">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button id="saveTarget" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
@@ -171,75 +136,6 @@
           buildPortfolioPieChart(categoryRatios);
         });
       }
-
-      $("#addTransaction").on("click", function () {
-        $(this).attr("disabled", "disabled");
-
-        addon.addTransaction({
-          description: "New transaction from Example Add-on"
-        }).then(function (transaction) {
-          $("#result").html("New transaction:<br><code>" + JSON.stringify(transaction) + "</code>");
-        }).catch(function (err) {
-          $("#result").html("Error:<br><code>" + err + "</code>");
-        }).finally(function () {
-          $("#addTransaction").removeAttr("disabled");
-        });
-      });
-
-      $("#getTransactions").on("click", function () {
-        $(this).attr("disabled", "disabled");
-
-        addon.api.getTransactions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $("#result").html("List Transactions Result:<br><code>" + JSON.stringify(response) + "</code>");
-        }).catch(function (err) {
-          $("#result").html("Error:<br><code>" + err + "</code>");
-        }).finally(function () {
-          $("#getTransactions").removeAttr("disabled");
-        });
-      });
-
-      $("#getPositions").on("click", function () {
-        $(this).attr("disabled", "disabled");
-
-        addon.api.getPositions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $("#result").html("List Positions Result:<br><code>" + JSON.stringify(response) + "</code>");
-        }).catch(function (err) {
-          $("#result").html("Error:<br><code>" + err + "</code>");
-        }).finally(function () {
-          $("#getPositions").removeAttr("disabled");
-        });
-      });
-
-      $("#saveData").on("click", function () {
-        $(this).attr("disabled", "disabled");
-        var newData = $("#data").val();
-
-        // Try parsing textarea value to a JSON object before passing to addon.saveData(data)
-        try { newData = JSON.parse(newData) }
-        catch (e) {
-          $("#result").html("Error:<br><code>Data must be JSON</code>");
-          $("#saveData").removeAttr("disabled");
-          return;
-        }
-
-        addon.saveData(newData).catch(function (err) {
-          $("#result").html("Error:<br><code>" + err + "</code>");
-        }).finally(function () {
-          $("#saveData").removeAttr("disabled");
-        });
-      });
-
-      $("#getInstitutions").on("click", function () {
-        $(this).attr("disabled", "disabled");
-
-        addon.api.getInstitutions(getQueryFromOptions(addonOptions)).then(function (response) {
-          $("#result").html("List Positions Result:<br><code>" + JSON.stringify(response) + "</code>");
-        }).catch(function (err) {
-          $("#result").html("Error:<br><code>" + err + "</code>");
-        }).finally(function () {
-          $("#getPositions").removeAttr("disabled");
-        });
-      });
 
       $("#saveTarget").on("click", function () {
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;

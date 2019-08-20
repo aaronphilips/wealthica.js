@@ -290,12 +290,12 @@
             if(adjustment == null){
               continue;
             }
-            
+
             var quantity = Math.round(institution.cash * adjustment / position.security.last_price);
             var amount = quantity * position.market_value;
             tbody.append(`
             <tr>
-            <td>${position.name}</td>
+            <td><span class="badge badge-light pt-2 mr-2" style="width: 50px">${position.security.symbol}/span>${position.security.name}</td>
             <td>${quantity}</td>
             <td>${amount}</td>
             </tr>

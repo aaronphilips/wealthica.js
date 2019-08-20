@@ -292,7 +292,7 @@
               continue;
             }
 
-            var quantity = Math.round(institution.cash * adjustment / position.security.last_price);
+            var quantity = Math.floor(institution.cash * adjustment / position.security.last_price);
             var amount = quantity * position.security.last_price;
             tbody.append(`
             <tr>

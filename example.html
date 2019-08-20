@@ -25,7 +25,7 @@
 <body>
   <div class="mt-2">
     <div class="row">
-      <div class="col d-flex align-content-stretch">
+      <div class="col">
         <div class="card">
           <div class="card-header">
             <h4>
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <div class="col d-flex align-content-stretch">
+      <div class="col">
         <div class="card">
           <div class="card-header">
             <h4 class="card-header-title">
@@ -108,7 +108,6 @@
       }).on("update", function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
-        loadPaperGrowthDashboard();
       });
 
       function loadPaperGrowthDashboard() {

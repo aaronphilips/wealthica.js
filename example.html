@@ -265,7 +265,10 @@
           });
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
-          adjustments = adjustments.where(a => a.adjustment > 0).toArray();
+          adjustments = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
+
+          var totalAdjustment = Object.entries(adjustments).reduce((acc, [key, val]) => acc + val, 0);
+
           var z = 0;
           // <table class="table table-sm table-nowrap card-table">
           //       <thead>

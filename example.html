@@ -151,10 +151,6 @@
             return acc
           }, {});
 
-          // Object.entries(categoryRatios).forEach(element => {
-          //   addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
-          // });
-
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
           buildBalancePortfolioTable(categoryRatios, institutions);

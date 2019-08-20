@@ -263,7 +263,7 @@
           var table = $("<table>", {
             "class": "table table-sm"
           });
-          table.html(`<table class="table table-sm mb-1">
+          table.html(`<table class="table table-sm mb-2">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -273,8 +273,6 @@
                 </thead>
               </table>`);
 
-          var tbody = $("<tbody>");
-
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
           adjustments = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
@@ -283,11 +281,23 @@
 
           Object.keys(adjustments).forEach(function (key) { adjustments[key] = adjustments[key] / totalAdjustment });
 
-          var z = 0;
-
+          var tbody = $("<tbody>");
+          var positionsArray = positions.toArray();
+          for (let j = 0; j < positionsArray.length; j++) {
+            const position = positionsArray[j];
+            var z = 0;
+            var quantity = Math.round(institution.cash * adjustments[position.category] / position.market_value);
+            var amount = quantity * position.market_value;
+            tbody.append(`
+            <tr>
+            <td>${position.Name}</td>
+            <td>${quantity}</td>
+            <td>${amount}</td>
+            </tr>
+            `)
+          }
           table.append(tbody);
-
-          $("#balanceTablesContainer").append(table);          
+          $("#balanceTablesContainer").append(table);
         }
       }
 

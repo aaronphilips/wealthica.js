@@ -125,10 +125,11 @@
         addonOptions = options;
         $("button").removeAttr("disabled");
         loadPaperGrowthDashboard();
-        addon.saveData(addonOptions.data);
       }).on("update", function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
+        $("#category-table").empty();
+        $("#container").empty();
         loadPaperGrowthDashboard();
       });
 
@@ -150,9 +151,9 @@
             return acc
           }, {});
 
-          Object.entries(categoryRatios).forEach(element => {
-            addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
-          });
+          // Object.entries(categoryRatios).forEach(element => {
+          //   addonOptions.data[element[0]] = addonOptions.data[element[0]] || 0;
+          // });
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
@@ -162,12 +163,7 @@
 
       $("#saveTarget").on("click", function () {
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
-        addon.saveData(addonOptions.data);
-
-        $("#category-table").empty();
-        $("#container").empty();
-
-        loadPaperGrowthDashboard();
+        addon.saveData(addonOptions.data);     
       });
 
       // Compose a query object from the addon options to pass to the API calls.

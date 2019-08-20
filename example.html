@@ -263,7 +263,7 @@
           var table = $("<table>", {
             "class": "table table-sm"
           });
-          var arr = Enumerable.from(institution.investments).selectMany(i => i.positions).where(categoryRatios[p.category] > 0).toArray();
+          var arr = Enumerable.from(institution.investments).selectMany(i => i.positions).where(p => categoryRatios[p.category] > 0).toArray();
           var z = 0;
           // <table class="table table-sm table-nowrap card-table">
           //       <thead>

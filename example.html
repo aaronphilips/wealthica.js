@@ -263,6 +263,19 @@
           var table = $("<table>", {
             "class": "table table-sm"
           });
+          table.html(`<table class="table table-sm table-nowrap card-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-center" width="100">Target</th>
+                    <th class="text-center" width="100">Actual</th>
+                    <th width="100"></th>
+                  </tr>
+                </thead>
+              </table>`);
+
+          var tbody = $("<tbody>");
+
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
           adjustments = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
@@ -272,18 +285,11 @@
           Object.keys(adjustments).forEach(function (key) { adjustments[key] = adjustments[key] / totalAdjustment });
 
           var z = 0;
-          // <table class="table table-sm table-nowrap card-table">
-          //       <thead>
-          //         <tr>
-          //           <th>Name</th>
-          //           <th class="text-center" width="100">Target</th>
-          //           <th class="text-center" width="100">Actual</th>
-          //           <th width="100"></th>
-          //         </tr>
-          //       </thead>
-          //       <tbody id="category-table">
-          //       </tbody>
-          //     </table>
+
+          table.append(tbody);
+
+          $("#balanceTablesContainer").append(table);
+          
         }
       }
 

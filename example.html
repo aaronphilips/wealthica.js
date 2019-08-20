@@ -64,6 +64,20 @@
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h4>
+        Balance Portfolio
+      </h4>
+    </div>
+    <div class="card-body">
+      <div id="balanceTablesContainer">
+
+      </div>
+    </div>
+  </div>
+  
   <div class="modal fade" id="editTargetModal" tabindex="-1" role="dialog" aria-labelledby="editTargetModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -92,10 +106,16 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://unpkg.com/linq/linq.min.js"></script>
+
   <script type="text/javascript">
     var addon, addonOptions;
 
     $(function () {
+
+      var t = Enumerable.range(1, 10)
+        .where(function (i) { return i % 3 == 0; })
+        .select(function (i) { return i * 10; });
 
       addon = new Addon();
 

@@ -23,50 +23,42 @@
 </head>
 
 <body>
-  <div>
-    <h6>
-      PaperGrowth
-    </h6>
-    <h1>
-      Dashboard
-    </h1>
-    <div class="mt-2">
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-header">
-              <h4>
-                Categories
-              </h4>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-sm table-nowrap card-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th class="text-center" width="100">Target</th>
-                      <th class="text-center" width="100">Actual</th>
-                      <th width="100"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="category-table">
-                  </tbody>
-                </table>
-              </div>
+  <div class="mt-2">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <h4>
+              Categories
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-sm table-nowrap card-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-center" width="100">Target</th>
+                    <th class="text-center" width="100">Actual</th>
+                    <th width="100"></th>
+                  </tr>
+                </thead>
+                <tbody id="category-table">
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-header-title">
-                Chart
-              </h4>
-            </div>
-            <div class="card-body">
-              <div id="container"></div>
-            </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-header-title">
+              Chart
+            </h4>
+          </div>
+          <div class="card-body">
+            <div id="container"></div>
           </div>
         </div>
       </div>
@@ -127,7 +119,7 @@
           var positions = data[0];
           var institutions = data[1];
           var saved = addonOptions.data || {};
-                    
+
           addonOptions.data = {}
 
           var totalMarketValue = positions.reduce(function (acc, x) {
@@ -261,7 +253,7 @@
         });
       }
 
-      function buildPurchaseTable(categoryRatios, positions, institutions){
+      function buildPurchaseTable(categoryRatios, positions, institutions) {
 
       }
 

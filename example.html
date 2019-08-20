@@ -34,7 +34,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-sm table-nowrap card-table">
+              <table class="table table-sm">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -258,7 +258,23 @@
       }
 
       function buildPurchaseTable(categoryRatios, positions, institutions) {
-
+        institutions.forEach(institution =>{
+          var table = $("<table>", {
+            "class": "table table-sm"
+          });
+          // <table class="table table-sm table-nowrap card-table">
+          //       <thead>
+          //         <tr>
+          //           <th>Name</th>
+          //           <th class="text-center" width="100">Target</th>
+          //           <th class="text-center" width="100">Actual</th>
+          //           <th width="100"></th>
+          //         </tr>
+          //       </thead>
+          //       <tbody id="category-table">
+          //       </tbody>
+          //     </table>
+        })
       }
 
       function shadeColor(color, percent) {

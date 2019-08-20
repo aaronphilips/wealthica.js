@@ -285,8 +285,13 @@
           var positionsArray = positions.toArray();
           for (let j = 0; j < positionsArray.length; j++) {
             const position = positionsArray[j];
-            var z = 0;
-            var quantity = Math.round(institution.cash * adjustments[position.category] / position.security.last_price);
+            var adjustment = adjustments[position.category];
+
+            if(adjustment == null){
+              continue;
+            }
+            
+            var quantity = Math.round(institution.cash * adjustment / position.security.last_price);
             var amount = quantity * position.market_value;
             tbody.append(`
             <tr>

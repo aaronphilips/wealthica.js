@@ -157,13 +157,13 @@
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
-          buildPurchaseTable(categoryRatios, positions, institutions);
+          buildBalancePortfolioTable(categoryRatios, institutions);
         });
       }
 
       $("#saveTarget").on("click", function () {
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
-        addon.saveData(addonOptions.data);     
+        addon.saveData(addonOptions.data);
       });
 
       // Compose a query object from the addon options to pass to the API calls.
@@ -257,11 +257,18 @@
         });
       }
 
-      function buildPurchaseTable(categoryRatios, positions, institutions) {
-        institutions.forEach(institution =>{
+      function buildBalancePortfolioTable(categoryRatios, institutions) {
+        institutions.forEach(institution => {
+         
+        }, this);
+
+        for (let index = 0; index < array.length; index++) {
+          const institution = array[index];
           var table = $("<table>", {
             "class": "table table-sm"
           });
+          var arr = Enumerable.from(institution.investments).selectMany(i => i.positions).where(categoryRatios[p.category] > 0).toArray();
+          var z = 0;
           // <table class="table table-sm table-nowrap card-table">
           //       <thead>
           //         <tr>
@@ -274,7 +281,7 @@
           //       <tbody id="category-table">
           //       </tbody>
           //     </table>
-        })
+        }
       }
 
       function shadeColor(color, percent) {

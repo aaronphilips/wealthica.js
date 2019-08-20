@@ -258,12 +258,8 @@
       }
 
       function buildBalancePortfolioTable(categoryRatios, institutions) {
-        institutions.forEach(institution => {
-         
-        }, this);
-
-        for (let index = 0; index < array.length; index++) {
-          const institution = array[index];
+        for (let index = 0; index < institutions.length; index++) {
+          const institution = institutions[index];
           var table = $("<table>", {
             "class": "table table-sm"
           });

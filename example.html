@@ -77,7 +77,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal fade" id="editTargetModal" tabindex="-1" role="dialog" aria-labelledby="editTargetModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -129,6 +129,7 @@
       }).on("update", function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
+        loadPaperGrowthDashboard();
       });
 
       function loadPaperGrowthDashboard() {

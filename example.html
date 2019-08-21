@@ -283,11 +283,9 @@
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - actuals[p.category] }));
           adjustments = adjustments.where(a => a.adjustment > 0);
 
-          var totalAdjustment = adjustments.aggregate(0, "a,b=>a+b.adjustment");
-          
-          adjustments = adjustments.toObject(a => a.category, a => a.adjustment);
+          var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.adjustment);
 
-          Object.keys(adjustments).forEach(function (key) { adjustments[key] = adjustments[key] / totalAdjustment });
+          adjustments = adjustments.toObject(a => a.category, a => a.adjustment/ totalAdjustment);
 
           var tbody = $("<tbody>");
           var positionsArray = positions.toArray();

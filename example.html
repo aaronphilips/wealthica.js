@@ -154,7 +154,7 @@
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
-          buildBalancePortfolioTable(categoryRatios, institutions);
+          buildBalancePortfolioTable(institutions);
         });
       }
 
@@ -252,7 +252,7 @@
         });
       }
 
-      function buildBalancePortfolioTable(categoryRatios, institutions) {
+      function buildBalancePortfolioTable(institutions) {
         for (let index = 0; index < institutions.length; index++) {
           const institution = institutions[index];
 
@@ -277,7 +277,7 @@
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
-          adjustments = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
+          var positives= adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
 
           var totalAdjustment = Object.entries(adjustments).reduce((acc, [key, val]) => acc + val, 0);
 

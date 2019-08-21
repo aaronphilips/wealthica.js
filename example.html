@@ -72,7 +72,7 @@
       </h4>
     </div>
     <div class="card-body">
-      <div id="balanceTablesContainer">
+      <div id="balance-tables-container">
 
       </div>
     </div>
@@ -94,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button id="saveTarget" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+          <button id="save-target" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
         </div>
       </div>
     </div>
@@ -157,7 +157,7 @@
         });
       }
 
-      $("#saveTarget").on("click", function () {
+      $("#save-target").on("click", function () {
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
         addon.saveData(addonOptions.data);
       });
@@ -264,7 +264,8 @@
           var table = $("<table>", {
             "class": "table table-sm"
           });
-          table.html(`<table class="table table-sm mb-2">
+          table.html(
+            `<table class="table table-sm mb-2">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -272,7 +273,8 @@
                     <th>Amount</th>
                   </tr>
                 </thead>
-              </table>`);
+              </table>`
+          );
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
@@ -294,16 +296,16 @@
 
             var quantity = Math.floor(institution.cash * adjustment / position.security.last_price);
             var amount = quantity * position.security.last_price;
-            tbody.append(`
-            <tr>
-            <td><span class="badge badge-light pt-2 mr-2" style="width: 50px">${position.security.symbol}</span>${position.security.name}</td>
-            <td>${quantity}</td>
-            <td>${amount.toFixed(2)}</td>
-            </tr>
-            `)
+            tbody.append(
+              `<tr>
+                <td><span class="badge badge-light pt-2 mr-2" style="width: 50px">${position.security.symbol}</span>${position.security.name}</td>
+                <td>${quantity}</td>
+                <td>${amount.toFixed(2)}</td>
+              </tr>`
+            );
           }
           table.append(tbody);
-          $("#balanceTablesContainer").append(table);
+          $("#balance-tables-container").append(table);
         }
       }
 
@@ -325,7 +327,6 @@
         var difference = Math.abs((actual - target) / target);
         return difference > 0.1 ? "text-danger" : difference < 0.01 ? "text-success" : "text-warning";
       }
-
     });
   </script>
 

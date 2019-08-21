@@ -113,10 +113,6 @@
 
     $(function () {
 
-      var t = Enumerable.range(1, 10)
-        .where(function (i) { return i % 3 == 0; })
-        .select(function (i) { return i * 10; });
-
       addon = new Addon();
 
       addon.on("init", function (options) {
@@ -137,9 +133,9 @@
       function loadPaperGrowthDashboard() {
         var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
-        Promise.all([getPositions, getInstitutions]).then(function (data) {
-          var positions = data[0];
-          var institutions = data[1];
+        var getCadExchangeRates = $.ajax({ url: 'https://api.exchangerate-api.com/v4/latest/cad' });
+        Promise.all([getPositions, getInstitutions, getCadExchangeRates]).then(function ([positions, institutions, cadExchangeRates]) {
+
           addonOptions.data = addonOptions.data || {};
 
           var totalMarketValue = positions.reduce(function (acc, x) {
@@ -175,7 +171,7 @@
       }
 
       function buildPortfolioTargetTable(data) {
-        Object.entries(addonOptions.data).forEach(([category,target], index) => {
+        Object.entries(addonOptions.data).forEach(([category, target], index) => {
           var actual = data[category] || 0;
           var tr = $("<tr>");
           var button = $("<button>", {
@@ -260,6 +256,13 @@
             continue;
           }
 
+          //TODO add 
+          var total = 0;
+          for (let j = 0; j < institution.investments.length; j++) {
+            const investment = institution.investments[j];
+
+          }
+
           var table = $("<table>", {
             "class": "table table-sm"
           });
@@ -277,7 +280,7 @@
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
-          var positives= adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
+          var positives = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
 
           var totalAdjustment = Object.entries(adjustments).reduce((acc, [key, val]) => acc + val, 0);
 

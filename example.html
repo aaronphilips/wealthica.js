@@ -133,8 +133,8 @@
       function loadPaperGrowthDashboard() {
         var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
-        var getCadExchangeRates = $.ajax({ url: 'https://api.exchangerate-api.com/v4/latest/cad' });
-        Promise.all([getPositions, getInstitutions, getCadExchangeRates]).then(function ([positions, institutions, cadExchangeRates]) {
+        var getCadExchange = $.ajax({ url: 'https://api.exchangerate-api.com/v4/latest/cad' });
+        Promise.all([getPositions, getInstitutions, getCadExchange]).then(function ([positions, institutions, cadExchange]) {
 
           addonOptions.data = addonOptions.data || {};
 
@@ -150,7 +150,7 @@
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
-          buildBalancePortfolioTable(institutions);
+          buildBalancePortfolioTable(institutions, cadExchange.rates);
         });
       }
 
@@ -248,7 +248,7 @@
         });
       }
 
-      function buildBalancePortfolioTable(institutions) {
+      function buildBalancePortfolioTable(institutions, cadExchangeRates) {
         for (let index = 0; index < institutions.length; index++) {
           const institution = institutions[index];
 
@@ -256,11 +256,10 @@
             continue;
           }
 
-          //TODO add 
           var total = 0;
           for (let j = 0; j < institution.investments.length; j++) {
             const investment = institution.investments[j];
-
+            total = total + (investment.value * cadExchangeRates[investment.currency])
           }
 
           var table = $("<table>", {

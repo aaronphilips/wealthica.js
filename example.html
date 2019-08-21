@@ -256,12 +256,8 @@
             continue;
           }
 
-          var total = 0;
-          for (let j = 0; j < institution.investments.length; j++) {
-            const investment = institution.investments[j];
-            total = total + investment.value;
-          }
-
+          var total = institution.value;
+        
           var table = $("<table>", {
             "class": "table table-sm"
           });
@@ -278,7 +274,13 @@
           );
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
-          var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - categoryRatios[p.category] }));
+
+          var actuals = positions.reduce(function (acc, x) {
+            acc[x.category] = (acc[x.category] || 0) + (x.market_value / total);
+            return acc
+          }, {});
+          
+          var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - actuals[p.category] }));
           var positives = adjustments.where(a => a.adjustment > 0).toObject(a => a.category, a => a.adjustment);
 
           var totalAdjustment = Object.entries(adjustments).reduce((acc, [key, val]) => acc + val, 0);

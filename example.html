@@ -259,7 +259,7 @@
           var total = 0;
           for (let j = 0; j < institution.investments.length; j++) {
             const investment = institution.investments[j];
-            total = total + (investment.value * cadExchangeRates[investment.currency])
+            total = total + investment.value;
           }
 
           var table = $("<table>", {

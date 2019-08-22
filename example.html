@@ -120,25 +120,14 @@
       });
 
       function loadPaperGrowthDashboard() {
-        var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
-        var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
-        Promise.all([getPositions, getInstitutions]).then(function ([positions, institutions]) {
-
+        addon.api.getInstitutions(getQueryFromOptions(addonOptions)).then(institutions => {
           addonOptions.data = addonOptions.data || {};
 
-          var totalMarketValue = positions.reduce(function (acc, x) {
-            acc = acc + x.market_value;
-            return acc
-          }, 0);
+          categoryRatios = getCategoryRatios(institutions);
 
-          var categoryRatios = positions.reduce(function (acc, x) {
-            acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
-            return acc
-          }, {});
-
-          buildPortfolioTargetTable(categoryRatios)
-          buildPortfolioPieChart(categoryRatios);
-          buildBalancePortfolioTable(categoryRatios, institutions);
+          // buildPortfolioTargetTable(categoryRatios)
+          // buildPortfolioPieChart(categoryRatios);
+          // buildBalancePortfolioTable(categoryRatios, institutions);
         });
       }
 
@@ -146,17 +135,6 @@
         addonOptions.data[$("#selectedCategory").val()] = $("#newTarget").val() / 100;
         addon.saveData(addonOptions.data);
       });
-
-      // Compose a query object from the addon options to pass to the API calls.
-      function getQueryFromOptions(options) {
-        return {
-          from: options.dateRangeFilter && options.dateRangeFilter[0],
-          to: options.dateRangeFilter && options.dateRangeFilter[1],
-          groups: options.groupsFilter,
-          institutions: options.institutionsFilter,
-          investments: options.investmentsFilter === "all" ? null : options.investmentsFilter,
-        }
-      }
 
       function buildPortfolioTargetTable(data) {
         Object.entries(addonOptions.data).forEach(([category, target], index) => {
@@ -298,6 +276,27 @@
           }
           table.append(tbody);
           $("#balance-tables-container").append(table);
+        }
+      }
+
+      function getCategoryRatios(institutions) {
+        var totalValue = Enumerable.from(institutions).aggregate(0, (a, i) => a + i.val);
+        var positions = Enumerable.from(institutions).selectMany(i => i.investments).selectMany(i => i.positions)
+
+        var categoryRatios = positions.aggregate({}, (a, p) => {
+          a[p.category] = (a[p.category] || 0) + (p.market_value / totalValue);
+          return acc
+        });
+      }
+
+      // Compose a query object from the addon options to pass to the API calls.
+      function getQueryFromOptions(options) {
+        return {
+          from: options.dateRangeFilter && options.dateRangeFilter[0],
+          to: options.dateRangeFilter && options.dateRangeFilter[1],
+          groups: options.groupsFilter,
+          institutions: options.institutionsFilter,
+          investments: options.investmentsFilter === "all" ? null : options.investmentsFilter,
         }
       }
 

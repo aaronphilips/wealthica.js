@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family:'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
   </style>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -222,19 +222,17 @@
           var total = institution.value;
 
           var table = $("<table>", {
-            "class": "table table-sm"
+            "class": "table table-sm mb-2"
           });
+
           table.html(
-            `<h6>${institution.name}</h6>
-            <table class="table table-sm mb-2">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-              </table>`
+            `<thead>
+              <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+              </tr>
+            </thead>`
           );
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions);
@@ -266,8 +264,15 @@
               </tr>`
             );
           }
+
           table.append(tbody);
-          $("#balance-tables-container").append(table);
+
+          var div = $("<div>");
+
+          div.html(`<h6>${institution.name}</h6>`)
+          div.append(table)
+
+          $("#balance-tables-container").append(div);
         }
       }
 

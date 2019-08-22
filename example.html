@@ -20,61 +20,53 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://kit.fontawesome.com/a2ea88a0c5.js"></script>
+  <style>
+    body {
+      font-family: Arial !important;
+    }
+  </style>
 </head>
 
 <body>
   <div class="mb-4">
     <div class="row">
       <div class="col-8 d-flex">
-        <div class="card flex-fill">
-          <div class="card-header">
-            <h4>
-              Categories
-            </h4>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th class="text-center" width="100">Target</th>
-                    <th class="text-center" width="100">Actual</th>
-                    <th width="100"></th>
-                  </tr>
-                </thead>
-                <tbody id="category-table">
-                </tbody>
-              </table>
-            </div>
+        <div class="flex-fill">
+          <h4>
+            Categories
+          </h4>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th class="text-center" width="100">Target</th>
+                  <th class="text-center" width="100">Actual</th>
+                  <th width="100"></th>
+                </tr>
+              </thead>
+              <tbody id="category-table">
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
       <div class="col-4 d-flex">
-        <div class="card flex-fill">
-          <div class="card-header">
-            <h4 class="card-header-title">
-              Chart
-            </h4>
-          </div>
-          <div class="card-body">
-            <div id="container"></div>
-          </div>
+        <div class="flex-fill">
+          <h4>
+            Chart
+          </h4>
+          <div id="container"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <h4>
-        Balance Portfolio
-      </h4>
-    </div>
-    <div class="card-body">
-      <div id="balance-tables-container">
-
-      </div>
+  <div>
+    <h4>
+      Balance Portfolio
+    </h4>
+    <div id="balance-tables-container">
     </div>
   </div>
 
@@ -133,8 +125,7 @@
       function loadPaperGrowthDashboard() {
         var getPositions = addon.api.getPositions(getQueryFromOptions(addonOptions));
         var getInstitutions = addon.api.getInstitutions(getQueryFromOptions(addonOptions));
-        var getCadExchange = $.ajax({ url: 'https://api.exchangerate-api.com/v4/latest/cad' });
-        Promise.all([getPositions, getInstitutions, getCadExchange]).then(function ([positions, institutions, cadExchange]) {
+        Promise.all([getPositions, getInstitutions]).then(function ([positions, institutions]) {
 
           addonOptions.data = addonOptions.data || {};
 
@@ -150,7 +141,7 @@
 
           buildPortfolioTargetTable(categoryRatios)
           buildPortfolioPieChart(categoryRatios);
-          buildBalancePortfolioTable(institutions, cadExchange.rates);
+          buildBalancePortfolioTable(categoryRatios, institutions);
         });
       }
 
@@ -248,7 +239,7 @@
         });
       }
 
-      function buildBalancePortfolioTable(institutions, cadExchangeRates) {
+      function buildBalancePortfolioTable(actuals, institutions) {
         for (let index = 0; index < institutions.length; index++) {
           const institution = institutions[index];
 
@@ -276,17 +267,17 @@
 
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
 
-          var actuals = positions.aggregate({}, function (acc, x) {
-            acc[x.category] = (acc[x.category] || 0) + (x.market_value / total);
-            return acc;
-          });
+          // var actuals = positions.aggregate({}, function (acc, x) {
+          //   acc[x.category] = (acc[x.category] || 0) + (x.market_value / total);
+          //   return acc;
+          // });
 
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - actuals[p.category] }));
           adjustments = adjustments.where(a => a.adjustment > 0);
 
           var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.adjustment);
 
-          adjustments = adjustments.toObject(a => a.category, a => a.adjustment/ totalAdjustment);
+          adjustments = adjustments.toObject(a => a.category, a => a.adjustment / totalAdjustment);
 
           var tbody = $("<tbody>");
           var positionsArray = positions.toArray();

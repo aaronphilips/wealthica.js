@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: Lato !important;
+      font-family:'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
   </style>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -226,8 +226,8 @@
           });
           table.html(
             `<table class="table table-sm mb-2">
+                <h6>${institution.name}</h6>
                 <thead>
-                  <h6>${institution.name}</h6>
                   <tr>
                     <th>Name</th>
                     <th>Quantity</th>
@@ -278,7 +278,7 @@
         var categoryRatios = {};
         for (let index = 0; index < positions.length; index++) {
           const position = positions[index];
-          var orignalValue=categoryRatios[position.category] || 0;
+          var orignalValue = categoryRatios[position.category] || 0;
           categoryRatios[position.category] = orignalValue + (position.market_value / totalValue);
         }
 
@@ -295,7 +295,7 @@
         var categoryRatios = {};
         for (let index = 0; index < positions.length; index++) {
           const position = positions[index];
-          var orignalValue=categoryRatios[position.category] || 0;
+          var orignalValue = categoryRatios[position.category] || 0;
           categoryRatios[position.category] = orignalValue + (position.market_value / totalWithoutCash);
         }
 

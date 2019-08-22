@@ -126,8 +126,8 @@
           categoryRatios = getCategoryRatios(institutions);
           categoryRatiosWithCash = getCategoryRatiosWithCash(institutions);
 
-          buildPortfolioTargetTable(getCategoryRatios)
-          buildPortfolioPieChart(getCategoryRatios);
+          buildPortfolioTargetTable(categoryRatios)
+          buildPortfolioPieChart(categoryRatios);
           buildBalancePortfolioTable(categoryRatiosWithCash, institutions);
         });
       }
@@ -241,12 +241,7 @@
               </table>`
           );
 
-          var positions = Enumerable.from(institution.investments).selectMany(i => i.positions)
-
-          // var actuals = positions.aggregate({}, function (acc, x) {
-          //   acc[x.category] = (acc[x.category] || 0) + (x.market_value / total);
-          //   return acc;
-          // });
+          var positions = Enumerable.from(institution.investments).selectMany(i => i.positions);
 
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - actuals[p.category] }));
           adjustments = adjustments.where(a => a.adjustment > 0);
@@ -291,7 +286,6 @@
           categoryRatios[position.category] = orignalValue + (position.market_value / totalValue);
         }
 
-        var z = 0;
         return categoryRatios;
       }
 
@@ -309,7 +303,6 @@
           categoryRatios[position.category] = orignalValue + (position.market_value / totalWithoutCash);
         }
 
-        var z = 0;
         return categoryRatios;
       }
 

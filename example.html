@@ -280,15 +280,13 @@
       }
 
       function getCategoryRatios(institutions) {
-        var totalValue = Enumerable.from(institutions).aggregate(0, (a, i) => a + i.value);
-        var positions = Enumerable.from(institutions).selectMany(i => i.investments).selectMany(i => i.positions)
+        var totalValue = Enumerable.from(institutions).aggregate(0, (a, i) => a + i.val);
+        var positions = Enumerable.from(institutions).selectMany(i => i.investments).selectMany(i => i.positions).toArray();
 
-        var categoryRatios = positions.aggregate({}, (a, p) => {
-          a[p.category] = (a[p.category] || 0) + (p.market_value / totalValue);
+        var categoryRatios = positions.reduce(function (acc, x) {
+          acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
           return acc
-        });
-        c = categoryRatios.toArray();
-        return categoryRatios;
+        }, {});
       }
 
       // Compose a query object from the addon options to pass to the API calls.

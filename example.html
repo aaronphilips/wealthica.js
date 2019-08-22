@@ -287,6 +287,7 @@
           a[p.category] = (a[p.category] || 0) + (p.market_value / totalValue);
           return acc
         });
+        c = categoryRatios.toArray();
         return categoryRatios;
       }
 

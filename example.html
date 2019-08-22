@@ -238,7 +238,7 @@
           var positions = Enumerable.from(institution.investments).selectMany(i => i.positions);
 
           var adjustments = positions.select(p => ({ category: p.category, adjustment: addonOptions.data[p.category] - actuals[p.category] }));
-          adjustments = adjustments.where(a => a.adjustment > 0);
+          adjustments = adjustments.where(a => a.adjustment > 0).distinct(a => a.category);
 
           var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.adjustment);
 

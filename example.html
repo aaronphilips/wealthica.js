@@ -49,7 +49,7 @@
       </div>
       <div class="col-4 d-flex">
         <div class="flex-fill">
-          <div id="container"></div>
+          <div id="chart-container"></div>
         </div>
       </div>
     </div>
@@ -109,9 +109,6 @@
       }).on("update", function (options) {
         // Filters have been updated and Dashboard is passing in updated options
         addonOptions = _.extend(addonOptions, options);
-        $("#category-table").empty();
-        $("#container").empty();
-        $("#balance-tables-container").empty();
         loadPaperGrowthDashboard();
       });
 
@@ -134,6 +131,8 @@
       });
 
       function buildPortfolioTargetTable(data) {
+        $("#category-table").empty();
+
         Object.entries(addonOptions.data).forEach(([category, target], index) => {
           var actual = data[category] || 0;
           var tr = $("<tr>");
@@ -164,9 +163,11 @@
       }
 
       function buildPortfolioPieChart(data) {
+        $("#chart-container").empty();
+
         var actualSeriesData = Object.entries(data).map(x => ({ "name": x[0], "y": x[1] }));
         var targetSeriesData = Object.entries(addonOptions.data).map(x => ({ "name": x[0], "y": x[1] }));
-        Highcharts.chart("container", {
+        Highcharts.chart("chart-container", {
           chart: {
             plotBackgroundColor: null,
             plotBorderWidth: 0,
@@ -212,6 +213,8 @@
       }
 
       function buildBalancePortfolioTable(actuals, institutions) {
+        $("#balance-tables-container").empty();
+
         for (let index = 0; index < institutions.length; index++) {
           const institution = institutions[index];
 

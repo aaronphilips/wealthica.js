@@ -125,9 +125,9 @@
 
           categoryRatios = getCategoryRatios(institutions);
 
-          // buildPortfolioTargetTable(categoryRatios)
-          // buildPortfolioPieChart(categoryRatios);
-          // buildBalancePortfolioTable(categoryRatios, institutions);
+          buildPortfolioTargetTable(categoryRatios)
+          buildPortfolioPieChart(categoryRatios);
+          buildBalancePortfolioTable(categoryRatios, institutions);
         });
       }
 
@@ -287,6 +287,9 @@
           acc[x.category] = (acc[x.category] || 0) + (x.market_value / totalMarketValue);
           return acc
         }, {});
+
+        var z= 0;
+        return categoryRatios;
       }
 
       // Compose a query object from the addon options to pass to the API calls.

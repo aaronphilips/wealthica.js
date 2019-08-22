@@ -215,7 +215,7 @@
         for (let index = 0; index < institutions.length; index++) {
           const institution = institutions[index];
 
-          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(institution) == false) {
+          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(institution.id) == false) {
             continue;
           }
 

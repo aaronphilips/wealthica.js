@@ -225,13 +225,6 @@
             continue;
           }
 
-          if (empty === true) {
-            $("#balance-tables-container").append(
-              "<h4>Balance Portfolio</h4>"
-            )
-            empty = false;
-          }
-
           var total = institution.value;
 
           var table = $("<table>", {
@@ -268,6 +261,18 @@
             }
 
             var quantity = Math.floor(institution.cash * adjustment / position.security.last_price);
+
+            if (quantity > 0 == false) {
+              continue
+            }
+
+            if (empty === true) {
+              $("#balance-tables-container").append(
+                "<h4>Balance Portfolio</h4>"
+              )
+              empty = false;
+            }
+
             var amount = quantity * position.security.last_price;
             tbody.append(
               `<tr>

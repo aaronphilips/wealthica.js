@@ -4,18 +4,18 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>Wealthica Example Add-on</title>  
-  
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet"/>
+  <title>Wealthica Example Add-on</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-  
+
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
-  </style>  
+  </style>
 </head>
 
 <body>
@@ -49,10 +49,13 @@
       </div>
     </div>
   </div>
+  <div>
+    <h4>Balance Portfolio</h4>
+    <div id="balance-tables-container">
 
-  <div id="balance-tables-container">
-
+    </div>
   </div>
+
 
   <div class="modal fade" id="editTargetModal" tabindex="-1" role="dialog" aria-labelledby="editTargetModalLabel"
     aria-hidden="true">
@@ -78,10 +81,11 @@
 
   <script type="text/javascript" src="https://wealthica.github.io/wealthica.js/dist/addon.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://kit.fontawesome.com/a2ea88a0c5.js"></script>
-                                                         
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
@@ -89,7 +93,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/linq/linq.min.js"></script>
-                                                                         
+
 
   <script type="text/javascript">
     var addon, addonOptions;
@@ -266,12 +270,7 @@
               continue
             }
 
-            if (empty === true) {
-              $("#balance-tables-container").append(
-                "<h4>Balance Portfolio</h4>"
-              )
-              empty = false;
-            }
+            empty = false;
 
             var amount = quantity * position.security.last_price;
             tbody.append(
@@ -283,6 +282,10 @@
             );
           }
 
+          if (empty) {
+            continue;
+          }
+
           table.append(tbody);
 
           var div = $("<div>");
@@ -291,6 +294,10 @@
           div.append(table)
 
           $("#balance-tables-container").append(div);
+        }
+
+        if (empty) {
+          $("#balance-tables-container").append("<div class=\"alert alert-light\">Congratulations! You're account is properly balanced.</div>");
         }
       }
 

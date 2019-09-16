@@ -265,7 +265,7 @@
               continue;
             }
 
-            var quantity = Math.floor(institution.cash * adjustment / position.security.last_price);
+            var quantity = Math.floor(investment.cash * adjustment / position.security.last_price);
 
             if (quantity > 0 == false) {
               continue

@@ -218,14 +218,19 @@
         $("#balance-tables-container").empty();
 
         var empty = true;
-        for (let index = 0; index < institutions.length; index++) {
-          const institution = institutions[index];
+        var investments = Enumerable.from(institutions).selectMany(institution => Enumerable.from(institution.investments).select(i => Object.assign(({ "institutionId": institution._id }), i))).toArray();
+        for (let index = 0; index < investments.length; index++) {
+          const investment = investments[index];
 
-          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(institution.id) == false) {
+          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(investment.institutionId) == false) {
             continue;
           }
 
-          if (institution.cash == 0) {
+          if (addonOptions.investmentsFilter != null && addonOptions.investmentsFilter.split(",").includes(investment._id) == false) {
+            continue;
+          }
+
+          if (investment.cash <= 0.01) {
             continue;
           }
 
@@ -243,8 +248,6 @@
             </thead>`
           );
 
-          var positions = Enumerable.from(institution.investments).selectMany(i => i.positions);
-
           var adjustments = Enumerable.from(Object.keys(actuals)).select(category => ({ "category": category, adjustment: addonOptions.data[category] - actuals[category] }))
           adjustments = adjustments.where(a => a.adjustment > 0);
 
@@ -253,9 +256,9 @@
           adjustments = adjustments.toObject(a => a.category, a => a.adjustment / totalAdjustment);
 
           var tbody = $("<tbody>");
-          var positionsArray = positions.toArray();
-          for (let j = 0; j < positionsArray.length; j++) {
-            const position = positionsArray[j];
+
+          for (let j = 0; j < investment.positions.length; j++) {
+            const position = investment.positions[j];
             var adjustment = adjustments[position.category];
 
             if (adjustment == null) {

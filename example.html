@@ -218,7 +218,7 @@
         $("#balance-tables-container").empty();
 
         var empty = true;
-        var investments = Enumerable.from(institutions).selectMany(institution => Enumerable.from(institution.investments).select(i => Object.assign(({ "institutionId": institution._id }), i))).toArray();
+        var investments = Enumerable.from(institutions).selectMany(institution => Enumerable.from(institution.investments).select(i => Object.assign(({ "institutionId": institution._id, }), i))).toArray();
         for (let index = 0; index < investments.length; index++) {
           const investment = investments[index];
 
@@ -248,7 +248,7 @@
             </thead>`
           );
 
-          var adjustments = Enumerable.from(Object.keys(actuals)).select(category => ({ "category": category, adjustment: addonOptions.data[category] - actuals[category] }))
+          var adjustments = Enumerable.from(Object.keys(actuals)).select(category => ({ "category": category, "adjustment": addonOptions.data[category] - actuals[category] }))
           adjustments = adjustments.where(a => a.adjustment > 0);
 
           var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.adjustment);
@@ -291,7 +291,7 @@
 
           var div = $("<div>");
 
-          div.html(`<h6>${institution.name}</h6>`)
+          div.html(`<h6>${investment.name}</h6>`)
           div.append(table)
 
           $("#balance-tables-container").append(div);

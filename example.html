@@ -265,7 +265,7 @@
           var adjustments = Enumerable.from(Object.keys(actuals)).select(category => ({ "category": category, "adjustment": addonOptions.data[category] - actuals[category] }))
           adjustments = adjustments.where(a => a.adjustment > 0);
 
-          var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.cash);
+          var totalAdjustment = adjustments.aggregate(0, (a, b) => a + b.adjustment);
 
           adjustments = adjustments.toObject(a => a.category, a => a.adjustment / totalAdjustment);
 

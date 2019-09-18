@@ -222,29 +222,29 @@
         var accounts = investments.groupBy(i => i.name,
           i => i,
           function (key, group) {
-            var account = { 
+            var account = {
               "name": group.first().institutionName + " " + key,
-              "cash":99,
-              "positions":group.selectMany(g=>g.positions),              
-              };
-            return key.getFullYear() + "-" + group.toJoinedString(',');
-          },
-          function (key) {
-            return key;
+              "institionId": group.first().institutionId,
+              "investmentId": group.first()._id,
+              "cash": group.aggregate(0, (a, b) => a + b.adjustment),
+              "positions": group.selectMany(g => g.positions).toArray(),
+            };
+            return account;
           }
         ).toArray();
-        for (let index = 0; index < investments.length; index++) {
-          const investment = investments[index];
 
-          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(investment.institutionId) == false) {
+        for (let index = 0; index < accounts.length; index++) {
+          const account = accounts[index];
+
+          if (addonOptions.institutionsFilter != null && addonOptions.institutionsFilter.split(",").includes(account.institutionId) == false) {
             continue;
           }
 
-          if (addonOptions.investmentsFilter != null && addonOptions.investmentsFilter.split(",").includes(investment._id) == false) {
+          if (addonOptions.investmentsFilter != null && addonOptions.investmentsFilter.split(",").includes(account.investmentId) == false) {
             continue;
           }
 
-          if (investment.cash <= 0.01) {
+          if (account.cash <= 0.01) {
             continue;
           }
 
@@ -271,15 +271,15 @@
 
           var tbody = $("<tbody>");
 
-          for (let j = 0; j < investment.positions.length; j++) {
-            const position = investment.positions[j];
+          for (let j = 0; j < account.positions.length; j++) {
+            const position = account.positions[j];
             var adjustment = adjustments[position.category];
 
             if (adjustment == null) {
               continue;
             }
 
-            var quantity = Math.floor(investment.cash * adjustment / position.security.last_price);
+            var quantity = Math.floor(account.cash * adjustment / position.security.last_price);
 
             if (quantity > 0 == false) {
               continue
@@ -305,7 +305,7 @@
 
           var div = $("<div>");
 
-          div.html(`<h6>${investment.name}</h6>`)
+          div.html(`<h6>${account.name}</h6>`)
           div.append(table)
 
           $("#balance-tables-container").append(div);

@@ -226,7 +226,7 @@
               "name": group.first().institutionName + " " + key,
               "institionId": group.first().institutionId,
               "investmentId": group.first()._id,
-              "cash": group.aggregate(0, (a, b) => a + b.adjustment),
+              "cash": group.aggregate(0, (a, b) => a + b.cash),
               "positions": group.selectMany(g => g.positions).toArray(),
             };
             return account;

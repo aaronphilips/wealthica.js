@@ -218,7 +218,21 @@
         $("#balance-tables-container").empty();
 
         var empty = true;
-        var investments = Enumerable.from(institutions).selectMany(institution => Enumerable.from(institution.investments).select(i => Object.assign(({ "institutionId": institution._id, }), i))).toArray();
+        var investments = Enumerable.from(institutions).selectMany(institution => Enumerable.from(institution.investments).select(i => Object.assign(({ "institutionId": institution._id, "institutionName": institution.name }), i)))
+        var accounts = investments.groupBy(i => i.name,
+          i => i,
+          function (key, group) {
+            var account = { 
+              "name": group.first().institutionName + " " + key,
+              "cash":99,
+              "positions":group.selectMany(g=>g.positions),              
+              };
+            return key.getFullYear() + "-" + group.toJoinedString(',');
+          },
+          function (key) {
+            return key;
+          }
+        ).toArray();
         for (let index = 0; index < investments.length; index++) {
           const investment = investments[index];
 
